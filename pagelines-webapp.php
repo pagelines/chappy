@@ -366,6 +366,8 @@ pl_add_options_page( array( 'name' => 'pl_webapp', 'array' => $options ) );
 
 add_action( 'wp_footer', 'pl_webapp_show' );
 
-function pl_webapp_show() {
-
-}
+function pl_webapp_show() { ?>
+	<script type="text/javascript" language="JavaScript">
+    	showBookmarkBubble();
+    </script>
+<?php }
