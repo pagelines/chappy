@@ -98,6 +98,28 @@ function social_excerpts_settings() {
 		),
 		
 		
+			// pick the color of the border
+		'webapp_border_color'	=> 	array(
+			'default' 		=> 	'',
+			'version' 		=> 	'pro',
+			'type' 			=> 	'colorpicker',
+			'title' 		=> 	__('Border Color', 'pagelines'),
+			'inputlabel' 	=> 	__('Select the border color', 'pagelines'),
+			'shortexp' 		=> 	__('Select the color you would like your border around the button.', 'pagelines'),
+		),
+		
+		
+			// pick the color of the bold call to action
+		'webapp_bold_color'	=> 	array(
+			'default' 		=> 	'',
+			'version' 		=> 	'pro',
+			'type' 			=> 	'colorpicker',
+			'title' 		=> 	__('Call to Action Text Color', 'pagelines'),
+			'inputlabel' 	=> 	__('Select the Call to Action Text color', 'pagelines'),
+			'shortexp' 		=> 	__('Select the color you would like your call to action text to be.', 'pagelines'),
+		),
+		
+		
 		
 		
 	);
