@@ -38,11 +38,11 @@ function pl_webapp_js() {
 
 // registration of settings: (taken from social excerpts)
 // add action to settings
-add_action( 'admin_init', 'social_excerpts_settings' );
+add_action( 'admin_init', 'pl_webapp_bubble_settings' );
 /**
  * Function for loading custom settings
  */
-function social_excerpts_settings() {
+function pl_webapp_bubble_settings() {
 	// settings icon path
 	$icon_path = sprintf( '%s/%s', WP_PLUGIN_URL, basename(dirname( __FILE__ )));
 	// options array for creating the settings tab
@@ -52,7 +52,7 @@ function social_excerpts_settings() {
 
 
 		// edit text on pop up and replace the "this web app" with user text	
-		'webapp_replace_this_web_app'		=> 	array(
+		'pl_webapp_bubble_replace_this_web_app'		=> 	array(
 			'default'		=> 	'this_web_app',
 			'version'		=> 	'pro',
 			'type'			=> 	'text',
@@ -63,7 +63,7 @@ function social_excerpts_settings() {
 		
 		
 		// add the apple touch icon to float left of the text
-		'webapp_apple_touch_float_left'		=> 	array(
+		'pl_webapp_bubble_apple_touch_float_left'		=> 	array(
 			'default'		=> 	'True',
 			'version'		=> 	'pro',
 			'type'			=> 	'select',
@@ -77,7 +77,7 @@ function social_excerpts_settings() {
 		),
 		
 		// edit how many seconds the button stays on screen
-		'webapp_stay_on_screen'	=> 	array(
+		'pl_webapp_bubble_stay_on_screen'	=> 	array(
 			'default' 		=> 	'',
 			'version' 		=> 	'pro',
 			'type' 			=> 	'text',
@@ -88,7 +88,7 @@ function social_excerpts_settings() {
 		
 		
 			// edit how often the button is shown
-		'webapp_often_show'	=> 	array(
+		'pl_webapp_bubble_often_show'	=> 	array(
 			'default' 		=> 	'',
 			'version' 		=> 	'pro',
 			'type' 			=> 	'text',
@@ -99,7 +99,7 @@ function social_excerpts_settings() {
 		
 		
 			// pick the color of the border
-		'webapp_border_color'	=> 	array(
+		'pl_webapp_bubble_border_color'	=> 	array(
 			'default' 		=> 	'',
 			'version' 		=> 	'pro',
 			'type' 			=> 	'colorpicker',
@@ -110,7 +110,7 @@ function social_excerpts_settings() {
 		
 		
 			// pick the color of the bold call to action
-		'webapp_bold_color'	=> 	array(
+		'pl_webapp_bubble_bold_color'	=> 	array(
 			'default' 		=> 	'',
 			'version' 		=> 	'pro',
 			'type' 			=> 	'colorpicker',
