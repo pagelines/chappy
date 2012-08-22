@@ -28,7 +28,7 @@ function pl_webapp_bubble_js() {
 //used to pass settings into js. (taken from social excerpts http://www.pagelines.com/store/plugins/social-excerpts/)
 	$params = array(
 	
-				//need shit here to pass into js
+		//do we need
 	
 		)
 	);
