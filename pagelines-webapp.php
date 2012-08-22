@@ -11,9 +11,9 @@ Tags: extension
 */
 
 //function for loading the bookmark_bubble.js.
-add_action( 'wp_enqueue_scripts', 'pl_webapp_js' );
+add_action( 'wp_enqueue_scripts', 'pl_webapp_bubble_js' );
 
-function pl_webapp_js() {
+function pl_webapp_bubble_js() {
 	
 	$plugin_path = sprintf( '%s/%s', WP_PLUGIN_URL, basename(dirname( __FILE__ )));
 	
@@ -25,10 +25,12 @@ function pl_webapp_js() {
 		
 	wp_enqueue_script( 'pl-webapp-load', $load_script);
 
-//used to pass settings into js. (taken from social excerpts)
+//used to pass settings into js. (taken from social excerpts http://www.pagelines.com/store/plugins/social-excerpts/)
 	$params = array(
-		'appid' => ( ploption( 'facebook_appid' ) ) ? sprintf( '&appid=%s', ploption( 'facebook_appid' ) ) : '',
-		'lang'	=> ploption( 'facebook_language' )
+	
+				//need shit here to pass into js
+	
+		)
 	);
 	
 	wp_localize_script( 'pl-webapp-bubble', 'pl_webapp-bubble', $params );	
@@ -36,7 +38,7 @@ function pl_webapp_js() {
 
 }
 
-// registration of settings: (taken from social excerpts)
+// registration of settings: (taken from social excerpts http://www.pagelines.com/store/plugins/social-excerpts/)
 // add action to settings
 add_action( 'admin_init', 'pl_webapp_bubble_settings' );
 /**
@@ -125,12 +127,12 @@ function pl_webapp_bubble_settings() {
 	);
 
 // add options page to pagelines settings
-pl_add_options_page( array( 'name' => 'pl_webapp', 'array' => $options ) );
+pl_add_options_page( array( 'name' => 'pl_webapp_bubble', 'array' => $options ) );
 }
 
-add_action( 'wp_footer', 'pl_webapp_show' );
+add_action( 'wp_footer', 'pl_webapp_bubble_show' );
 
-function pl_webapp_show() { ?>
+function pl_webapp_bubble_show() { ?>
 	<script type="text/javascript" language="JavaScript">
     	showBookmarkBubble();
     </script>
