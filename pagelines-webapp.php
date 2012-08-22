@@ -63,7 +63,7 @@ function social_excerpts_settings() {
 		
 		
 		// add the apple touch icon to float left of the text
-		'webapp_apple_touch_float)_left'		=> 	array(
+		'webapp_apple_touch_float_left'		=> 	array(
 			'default'		=> 	'True',
 			'version'		=> 	'pro',
 			'type'			=> 	'select',
