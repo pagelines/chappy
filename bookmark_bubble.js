@@ -521,7 +521,9 @@ google.bookmarkbubble.Bubble.prototype.build_ = function () {
     var bubbleInner = document.createElement('div');
     bubbleInner.style.position = 'relative';
     bubbleInner.style.width = '214px';
-    bubbleInner.style.border = '2px solid #fff';
+    
+    var border = "2px solid" + pl_webapp_bubble.param_pl_webapp_bubble_border_color;
+    bubbleInner.style.border = border;
     bubbleInner.style.padding = '20px 20px 20px 10px';
     bubbleInner.style.WebkitBorderRadius = '8px';
     bubbleInner.style.WebkitBoxShadow = '0 0 8px rgba(0, 0, 0, 0.7)';
