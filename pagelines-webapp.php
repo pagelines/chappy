@@ -1,11 +1,12 @@
 <?php
 /*
 Plugin Name: Webapp for iOS & Android
-Description:
+Description: write me and get uri
 Version: 0.1
 Author: Aleksander Hansson & Mike Zielonka
-Author URI:
-Demo:
+Author URI: http://need-one.com
+Plugin URI: http://need-one.com
+Demo: http://need-one.com
 PageLines: true
 Tags: extension
 */
