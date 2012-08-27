@@ -55,7 +55,7 @@ function pl_webapp_bubble_settings() {
 	// options array for creating the settings tab
 	$options = array(
 		// icon for the settings tab
-		'icon' => $icon_path . '/settings-icon.png',
+		'icon' => $icon_path . '/icon.png',
 
 
 		// edit text on pop up and replace the "this web app" with user text
