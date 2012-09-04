@@ -11,12 +11,15 @@ PageLines: true
 Tags: extension
 */
 
+<<<<<<< HEAD
 //function for loading style.less file
 function custom_less() {
 	$file = sprintf( '%sstyle.less', plugin_dir_path( __FILE__ ) );
 	pagelines_insert_core_less( $file );
 }
 add_action( 'template_redirect', 'custom_less' );
+=======
+>>>>>>> adding git ignore file
 
 //function for loading the bookmark_bubble.js.
 add_action( 'wp_enqueue_scripts', 'pl_webapp_load_js' );
