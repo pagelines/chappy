@@ -19,35 +19,53 @@ function custom_less() {
 add_action( 'template_redirect', 'custom_less' );
 
 //function for loading the bookmark_bubble.js.
-add_action( 'wp_enqueue_scripts', 'pl_webapp_bubble_js' );
+add_action( 'wp_enqueue_scripts', 'pl_webapp_load_js' );
 
-function pl_webapp_bubble_js() {
+function pl_webapp_load_js() {
 
-	$plugin_path = sprintf( '%s/%s', WP_PLUGIN_URL, basename(dirname( __FILE__ )));
-	
-	$load_script = sprintf( '%s/%s', $plugin_path, 'pagelines-webapp-settings-load.js' );
-
-	wp_enqueue_script( 'pl-webapp-load', $load_script);
+	wp_enqueue_script( 'pl-webapp-load', plugins_url('/pagelines-webapp-settings-load.js', __FILE__));
 
 	//used to pass settings into js. (taken from social excerpts http://www.pagelines.com/store/plugins/social-excerpts/)
-	$params = array(
 
-		'param_pl_webapp_bubble_replace_this_web_app' 		=> ploption( 'pl_webapp_bubble_replace_this_web_app' ) ,
-		'param_pl_webapp_bubble_apple_touch_float_left' 	=> ploption( 'pl_webapp_bubble_apple_touch_float_left' ) ,
-		'param_pl_webapp_bubble_stay_on_screen' 			=> ploption( 'pl_webapp_bubble_stay_on_screen' ) ,
-		'param_pl_webapp_bubble_often_show' 				=> ploption( 'pl_webapp_bubble_often_show' ) ,
-		'param_pl_webapp_bubble_border_color' 				=> ploption( 'pl_webapp_bubble_border_color' ) ,
-		'param_pl_webapp_bubble_bold_color' 				=> ploption( 'pl_webapp_bubble_bold_color' ) 
+	wp_localize_script( 'pl-webapp-load', 'pl_webapp_load', array(
 
-	);
+		'param_pl_webapp_bubble_replace_message' 		=> ploption( 'pl_webapp_bubble_replace_message' ) ,
+		'param_pl_webapp_bubble_apple_touch_float_left' => ploption( 'pl_webapp_bubble_apple_touch_float_left' ) ,
+		'param_pl_webapp_bubble_animation_in' 			=> ploption( 'pl_webapp_bubble_animation_in' ) ,
+		'param_pl_webapp_bubble_animation_out' 			=> ploption( 'pl_webapp_bubble_animation_out' ) ,
+		'param_pl_webapp_bubble_start_delay' 			=> ploption( 'pl_webapp_bubble_start_delay' ) ,
+		'param_pl_webapp_bubble_lifespan' 				=> ploption( 'pl_webapp_bubble_lifespan' ) ,
+		'param_pl_webapp_bubble_often_show' 			=> ploption( 'pl_webapp_bubble_often_show' ) ,
+		'param_pl_webapp_bubble_arrow' 					=> ploption( 'pl_webapp_bubble_arrow' ) ,
+		'param_pl_webapp_bubble_autostart' 				=> ploption( 'pl_webapp_autostart' )
 
-	wp_localize_script( 'pl-webapp-bubble', 'pl_webapp_load', $params );
+	));
 
-	$bubble_script = sprintf( '%s/%s', $plugin_path, 'add2home.js' );
+	wp_enqueue_script( 'pl-webapp-bubble', plugins_url('/add2home.js', __FILE__));
 
-	wp_enqueue_script( 'pl-webapp-bubble', $bubble_script);
 
 }
+
+add_action( 'wp_head', 'pl_webapp_meta');
+
+function pl_webapp_meta() {
+
+	echo '<meta name="apple-mobile-web-app-capable" content="yes">';
+	echo '<meta name="apple-mobile-web-app-status-bar-style" content="black">';
+	
+}
+
+add_action( 'wp_footer', 'pl_webapp_load');
+
+function pl_webapp_load() { ?>
+
+<script type="text/javascript">
+
+addToHome.show()
+
+</script>
+
+<?php }
 
 // registration of settings: (taken from social excerpts http://www.pagelines.com/store/plugins/social-excerpts/)
 // add action to settings
@@ -71,7 +89,7 @@ function pl_webapp_bubble_settings() {
 
 		// edit text on pop up and replace the "this web app" with user text
 		'pl_webapp_bubble_replace_message'  =>  array(
-			'default'  =>  'this_web_app',
+			'default'  =>  '',
 			'version'  =>  'pro',
 			'type'   =>  'text',
 			'inputlabel'  =>  __('Your Text to Replace the Default Message. (this will override the language option)', 'pagelines'),
@@ -79,10 +97,23 @@ function pl_webapp_bubble_settings() {
 			'shortexp'   =>  __('Add your own custom text to replace the standard message verbiage with your own.  Example replacement: This is a custom message. Your device is an <strong>%device</strong>. The action icon is %icon.', 'pagelines'),
 		),
 
+		// add the apple touch icon to float left of the text
+		'pl_webapp_bubble_returning_visitor'  =>  array(
+			'default'  =>  'true',
+			'version'  =>  'pro',
+			'type'   =>  'select',
+			'selectvalues' =>  array(
+				'true'  =>  array( 'name' => __( 'True' , 'pagelines' )),
+				'false' =>  array( 'name' => __( 'False' , 'pagelines' ))
+			),
+			'inputlabel'  =>  __('Only show to returning visitors?', 'pagelines'),
+			'title'      =>  __('Returnign visitors', 'pagelines' ),
+			'shortexp'   =>  __('Show the balloon to returning visitors only (setting this to true is HIGHLY RECCOMENDED)', 'pagelines'),
+		),
 
 		// add the apple touch icon to float left of the text
 		'pl_webapp_bubble_apple_touch_float_left'  =>  array(
-			'default'  =>  'True',
+			'default'  =>  'true',
 			'version'  =>  'pro',
 			'type'   =>  'select',
 			'selectvalues' =>  array(
@@ -96,7 +127,7 @@ function pl_webapp_bubble_settings() {
 		
 		// add the apple touch icon to float left of the text
 		'pl_webapp_bubble_animation_in'  =>  array(
-			'default'  =>  'True',
+			'default'  =>  'drop',
 			'version'  =>  'pro',
 			'type'   =>  'select',
 			'selectvalues' =>  array(
@@ -111,7 +142,7 @@ function pl_webapp_bubble_settings() {
 		
 		// add the apple touch icon to float left of the text
 		'pl_webapp_bubble_animation_out'  =>  array(
-			'default'  =>  'True',
+			'default'  =>  'fade',
 			'version'  =>  'pro',
 			'type'   =>  'select',
 			'selectvalues' =>  array(
@@ -169,8 +200,8 @@ function pl_webapp_bubble_settings() {
 		),
 		
 		// add the apple touch icon to float left of the text
-		'pl_webapp_bubble_arrow'  =>  array(
-			'default'  =>  'True',
+		'pl_webapp_autostart'  =>  array(
+			'default'  =>  'true',
 			'version'  =>  'pro',
 			'type'   =>  'select',
 			'selectvalues' =>  array(
