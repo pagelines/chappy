@@ -11,15 +11,12 @@ PageLines: true
 Tags: extension
 */
 
-<<<<<<< HEAD
 //function for loading style.less file
 function custom_less() {
 	$file = sprintf( '%sstyle.less', plugin_dir_path( __FILE__ ) );
 	pagelines_insert_core_less( $file );
 }
 add_action( 'template_redirect', 'custom_less' );
-=======
->>>>>>> adding git ignore file
 
 //function for loading the bookmark_bubble.js.
 add_action( 'wp_enqueue_scripts', 'pl_webapp_load_js' );
@@ -32,43 +29,39 @@ function pl_webapp_load_js() {
 
 	wp_localize_script( 'pl-webapp-load', 'pl_webapp_load', array(
 
-		'param_pl_webapp_bubble_replace_message' 		=> ploption( 'pl_webapp_bubble_replace_message' ) ,
-		'param_pl_webapp_bubble_apple_touch_float_left' => ploption( 'pl_webapp_bubble_apple_touch_float_left' ) ,
-		'param_pl_webapp_bubble_animation_in' 			=> ploption( 'pl_webapp_bubble_animation_in' ) ,
-		'param_pl_webapp_bubble_animation_out' 			=> ploption( 'pl_webapp_bubble_animation_out' ) ,
-		'param_pl_webapp_bubble_start_delay' 			=> ploption( 'pl_webapp_bubble_start_delay' ) ,
-		'param_pl_webapp_bubble_lifespan' 				=> ploption( 'pl_webapp_bubble_lifespan' ) ,
-		'param_pl_webapp_bubble_often_show' 			=> ploption( 'pl_webapp_bubble_often_show' ) ,
-		'param_pl_webapp_bubble_arrow' 					=> ploption( 'pl_webapp_bubble_arrow' ) ,
-		'param_pl_webapp_bubble_autostart' 				=> ploption( 'pl_webapp_autostart' )
+			'param_pl_webapp_bubble_replace_message'   => ploption( 'pl_webapp_bubble_replace_message' ) ,
+			'param_pl_webapp_bubble_animation_in'    => ploption( 'pl_webapp_bubble_animation_in' ) ,
+			'param_pl_webapp_bubble_animation_out'    => ploption( 'pl_webapp_bubble_animation_out' ) ,
+			'param_pl_webapp_bubble_start_delay'    => ploption( 'pl_webapp_bubble_start_delay' ) ,
+			'param_pl_webapp_bubble_lifespan'     => ploption( 'pl_webapp_bubble_lifespan' ) ,
+			'param_pl_webapp_bubble_often_show'    => ploption( 'pl_webapp_bubble_often_show' ) ,
+			'param_pl_webapp_bubble_arrow'      => ploption( 'pl_webapp_bubble_arrow' ) ,
+			'param_pl_webapp_bubble_returning_visitor'  => ploption( 'pl_webapp_bubble_returning_visitor')
 
-	));
+		));
 
 	wp_enqueue_script( 'pl-webapp-bubble', plugins_url('/add2home.js', __FILE__));
 
 
 }
 
-add_action( 'wp_head', 'pl_webapp_meta');
+add_action( 'pagelines_head', 'pl_webapp_meta');
 
 function pl_webapp_meta() {
 
-	echo '<meta name="apple-mobile-web-app-capable" content="yes">';
-	echo '<meta name="apple-mobile-web-app-status-bar-style" content="black">';
-	
+	echo '<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0">';
+
+	// Of course it is advisable to have touch icons ready for each device
+	//<!-- Standard iPhone --> 
+	printf('<link rel="apple-touch-icon" sizes="57x57" href="%s" />', ploption( 'touch_icon_iphone' )) ;
+	//<!-- Retina iPhone --> 
+	printf('<link rel="apple-touch-icon" sizes="114x114" href="%s" />', ploption( 'touch_icon_iphone' )) ;
+	//<!-- Standard iPad --> 
+	printf('<link rel="apple-touch-icon" sizes="72x72" href="%s" />', ploption( 'touch_icon_ipad' )) ;
+	//<!-- Retina iPad --> 
+	printf('<link rel="apple-touch-icon" sizes="144x144" href="%s" />', ploption( 'touch_icon_ipad' )) ;
+
 }
-
-add_action( 'wp_footer', 'pl_webapp_load');
-
-function pl_webapp_load() { ?>
-
-<script type="text/javascript">
-
-addToHome.show()
-
-</script>
-
-<?php }
 
 // registration of settings: (taken from social excerpts http://www.pagelines.com/store/plugins/social-excerpts/)
 // add action to settings
@@ -85,8 +78,8 @@ function pl_webapp_bubble_settings() {
 		'icon' => $icon_path . '/icon.png',
 
 		///////////Below are meta settings/////////
-		
-		
+
+
 
 		///////////Below are js settings/////////
 
@@ -113,21 +106,28 @@ function pl_webapp_bubble_settings() {
 			'title'      =>  __('Returnign visitors', 'pagelines' ),
 			'shortexp'   =>  __('Show the balloon to returning visitors only (setting this to true is HIGHLY RECCOMENDED)', 'pagelines'),
 		),
-
-		// add the apple touch icon to float left of the text
-		'pl_webapp_bubble_apple_touch_float_left'  =>  array(
-			'default'  =>  'true',
-			'version'  =>  'pro',
-			'type'   =>  'select',
-			'selectvalues' =>  array(
-				'true'  =>  array( 'name' => __( 'True' , 'pagelines' )),
-				'false' =>  array( 'name' => __( 'False' , 'pagelines' ))
-			),
-			'inputlabel'  =>  __('Should your apple touch icon float to the left of the text?', 'pagelines'),
-			'title'      =>  __('Add Apple Touch Icon', 'pagelines' ),
-			'shortexp'   =>  __('Select true if you want your apple touch icon to float to the left of the text.', 'pagelines'),
+		'touch_icons'   => array(
+			'default'    => '',
+			'type'     => 'multi_option',
+			'title'     =>  __('Touch icons', 'pagelines'),							
+			'selectvalues'   => array(
+				'touch_icon_iphone' => array(
+					'default'          => '',
+					'type'              => 'image_upload',
+					'imagepreview'      => '270',
+					'inputlabel'      => __( 'Upload your Apple touch icon for iPhone.', 'pagelines' ),
+					'shortexp'          => __( 'The touch icon is the icon that your iPhone saves on the homescreen. The touch icon needs to be 114x114 pixel and should be named "touch-icon-iphone-114.png".', 'pagelines' ),
+				),
+				'touch_icon_ipad' => array(
+					'default'          => '',
+					'type'              => 'image_upload',
+					'imagepreview'      => '270',
+					'inputlabel'      => __( 'Upload your Apple touch icon for iPad.', 'pagelines' ),
+					'shortexp'          => __( 'The touch icon is the icon that your iPad saves on the homescreen. The touch icon needs to be 144x144 pixel and should be named "touch-icon-ipad-144.png".', 'pagelines' ),
+				)
+			)
 		),
-		
+
 		// add the apple touch icon to float left of the text
 		'pl_webapp_bubble_animation_in'  =>  array(
 			'default'  =>  'drop',
@@ -142,7 +142,7 @@ function pl_webapp_bubble_settings() {
 			'title'      =>  __('Appearing animation', 'pagelines' ),
 			'shortexp'   =>  __('Select one of the three options', 'pagelines'),
 		),
-		
+
 		// add the apple touch icon to float left of the text
 		'pl_webapp_bubble_animation_out'  =>  array(
 			'default'  =>  'fade',
@@ -167,7 +167,7 @@ function pl_webapp_bubble_settings() {
 			'inputlabel'  =>  __('Enter in ms', 'pagelines'),
 			'shortexp'   =>  __('Enter the ms you would like the button to delay before automaticly closing.  The default is 2000ms ', 'pagelines'),
 		),
-		
+
 		// edit how many seconds the button stays on screen
 		'pl_webapp_bubble_lifespan' =>  array(
 			'default'   =>  '',
@@ -187,10 +187,10 @@ function pl_webapp_bubble_settings() {
 			'inputlabel'  =>  __('Enter in mins', 'pagelines'),
 			'shortexp'   =>  __('Enter the mins you would like the button to delay before the button shows again.  The default is 240mins.', 'pagelines'),
 		),
-		
+
 		// add the apple touch icon to float left of the text
 		'pl_webapp_bubble_arrow'  =>  array(
-			'default'  =>  'True',
+			'default'  =>  'true',
 			'version'  =>  'pro',
 			'type'   =>  'select',
 			'selectvalues' =>  array(
@@ -200,20 +200,6 @@ function pl_webapp_bubble_settings() {
 			'inputlabel'  =>  __('Choose True or False', 'pagelines'),
 			'title'      =>  __('Display bubble arrow', 'pagelines' ),
 			'shortexp'   =>  __('Select true if you want your apple touch icon to float to the left of the text.', 'pagelines'),
-		),
-		
-		// add the apple touch icon to float left of the text
-		'pl_webapp_autostart'  =>  array(
-			'default'  =>  'true',
-			'version'  =>  'pro',
-			'type'   =>  'select',
-			'selectvalues' =>  array(
-				'true'  =>  array( 'name' => __( 'True' , 'pagelines' )),
-				'false' =>  array( 'name' => __( 'False' , 'pagelines' ))
-			),
-			'inputlabel'  =>  __('Choose True or False', 'pagelines'),
-			'title'      =>  __('Autostart (For Advanced Users)', 'pagelines' ),
-			'shortexp'   =>  __('You can call it anywhere with the javascript function: addToHome.show()', 'pagelines'),
 		),
 
 		///////Below is LESS settings////////////

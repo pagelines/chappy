@@ -37,7 +37,7 @@ var addToHome = (function (w) {
 			hookOnLoad: true,			// Should we hook to onload event? (really advanced usage)
 			iterations: 100				// Internal/debug use
 		},
-
+		
 		intl = {
 			ca_es: 'Per instal·lar aquesta aplicació al vostre %device premeu %icon i llavors <strong>Afegir a pantalla d\'inici</strong>.',
 			cs_cz: 'Pro instalaci aplikace na Váš %device, stiskněte %icon a v nabídce <strong>Přidat na plochu</strong>.',
