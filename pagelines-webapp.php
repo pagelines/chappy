@@ -23,11 +23,14 @@ add_action( 'wp_enqueue_scripts', 'pl_webapp_load_js' );
 
 function pl_webapp_load_js() {
 
-	wp_enqueue_script( 'pl-webapp-load', plugins_url('/pagelines-webapp-settings-load.js', __FILE__));
+if (ploption( 'pl_webapp_bubble_is_frontpage' )) {
+	if (is_front_page()){
 
-	//used to pass settings into js. (taken from social excerpts http://www.pagelines.com/store/plugins/social-excerpts/)
+		wp_enqueue_script( 'pl-webapp-load', plugins_url('/pagelines-webapp-settings-load.js', __FILE__));
 
-	wp_localize_script( 'pl-webapp-load', 'pl_webapp_load', array(
+		//used to pass settings into js. (taken from social excerpts http://www.pagelines.com/store/plugins/social-excerpts/)
+
+		wp_localize_script( 'pl-webapp-load', 'pl_webapp_load', array(
 
 			'param_pl_webapp_bubble_replace_message'   => ploption( 'pl_webapp_bubble_replace_message' ) ,
 			'param_pl_webapp_bubble_animation_in'    => ploption( 'pl_webapp_bubble_animation_in' ) ,
@@ -40,7 +43,31 @@ function pl_webapp_load_js() {
 
 		));
 
+		wp_enqueue_script( 'pl-webapp-bubble', plugins_url('/add2home.js', __FILE__));
+
+	}
+} else {
+
+	wp_enqueue_script( 'pl-webapp-load', plugins_url('/pagelines-webapp-settings-load.js', __FILE__));
+
+	//used to pass settings into js. (taken from social excerpts http://www.pagelines.com/store/plugins/social-excerpts/)
+
+	wp_localize_script( 'pl-webapp-load', 'pl_webapp_load', array(
+
+		'param_pl_webapp_bubble_replace_message'   => ploption( 'pl_webapp_bubble_replace_message' ) ,
+		'param_pl_webapp_bubble_animation_in'    => ploption( 'pl_webapp_bubble_animation_in' ) ,
+		'param_pl_webapp_bubble_animation_out'    => ploption( 'pl_webapp_bubble_animation_out' ) ,
+		'param_pl_webapp_bubble_start_delay'    => ploption( 'pl_webapp_bubble_start_delay' ) ,
+		'param_pl_webapp_bubble_lifespan'     => ploption( 'pl_webapp_bubble_lifespan' ) ,
+		'param_pl_webapp_bubble_often_show'    => ploption( 'pl_webapp_bubble_often_show' ) ,
+		'param_pl_webapp_bubble_arrow'      => ploption( 'pl_webapp_bubble_arrow' ) ,
+		'param_pl_webapp_bubble_returning_visitor'  => ploption( 'pl_webapp_bubble_returning_visitor')
+
+	));
+
 	wp_enqueue_script( 'pl-webapp-bubble', plugins_url('/add2home.js', __FILE__));
+
+}
 
 
 }
@@ -53,14 +80,20 @@ function pl_webapp_meta() {
 
 	// Of course it is advisable to have touch icons ready for each device
 	//<!-- Standard iPhone --> 
-	printf('<link rel="apple-touch-icon" sizes="57x57" href="%s" />', ploption( 'touch_icon_iphone' )) ;
+	if (ploption('touch_icon_iphone')) printf('<link rel="apple-touch-icon" sizes="57x57" href="%s" />', ploption( 'touch_icon_iphone' )) ;
 	//<!-- Retina iPhone --> 
-	printf('<link rel="apple-touch-icon" sizes="114x114" href="%s" />', ploption( 'touch_icon_iphone' )) ;
+	if (ploption('touch_icon_iphone')) printf('<link rel="apple-touch-icon" sizes="114x114" href="%s" />', ploption( 'touch_icon_iphone' )) ;
 	//<!-- Standard iPad --> 
-	printf('<link rel="apple-touch-icon" sizes="72x72" href="%s" />', ploption( 'touch_icon_ipad' )) ;
+	if (ploption('touch_icon_ipad')) printf('<link rel="apple-touch-icon" sizes="72x72" href="%s" />', ploption( 'touch_icon_ipad' )) ;
 	//<!-- Retina iPad --> 
-	printf('<link rel="apple-touch-icon" sizes="144x144" href="%s" />', ploption( 'touch_icon_ipad' )) ;
-
+	if (ploption('touch_icon_ipad')) printf('<link rel="apple-touch-icon" sizes="144x144" href="%s" />', ploption( 'touch_icon_ipad' )) ;
+	
+	//Splash screen
+	//<!-- iPhone (Retina) SPLASHSCREEN-->
+	if (ploption('splash_screen_iphone')) printf ('<link href="%s" media="(device-width: 320px) and (-webkit-device-pixel-ratio: 2)" rel="apple-touch-startup-image">', ploption( 'splash_screen_iphone' )) ;
+	//<!-- iPad (Retina, portrait) SPLASHSCREEN-->
+	if (ploption('splash_screen_ipad')) printf ('<link href="%s" media="(device-width: 1536px) and (orientation: portrait) and (-webkit-device-pixel-ratio: 2)" rel="apple-touch-startup-image">', ploption( 'splash_screen_ipad' )) ;
+	
 }
 
 // registration of settings: (taken from social excerpts http://www.pagelines.com/store/plugins/social-excerpts/)
@@ -94,6 +127,15 @@ function pl_webapp_bubble_settings() {
 		),
 
 		// add the apple touch icon to float left of the text
+		'pl_webapp_bubble_is_frontpage'  =>  array(
+			'default'  =>  '',
+			'version'  =>  'pro',
+			'type'   =>  'check',
+			'inputlabel'  =>  __('Only show on frontpage?', 'pagelines'),
+			'title'      =>  __('Show on frontpage', 'pagelines' ),
+			'exp'	=>	__('Checking this option will do so the balloon is only showed on frontpage!','pagelines'),
+		),
+
 		'pl_webapp_bubble_returning_visitor'  =>  array(
 			'default'  =>  'true',
 			'version'  =>  'pro',
@@ -109,25 +151,34 @@ function pl_webapp_bubble_settings() {
 		'touch_icons'   => array(
 			'default'    => '',
 			'type'     => 'multi_option',
-			'title'     =>  __('Touch icons', 'pagelines'),							
+			'title'     =>  __('Images', 'pagelines'),							
 			'selectvalues'   => array(
 				'touch_icon_iphone' => array(
 					'default'          => '',
 					'type'              => 'image_upload',
 					'imagepreview'      => '270',
-					'inputlabel'      => __( 'Upload your Apple touch icon for iPhone.', 'pagelines' ),
-					'shortexp'          => __( 'The touch icon is the icon that your iPhone saves on the homescreen. The touch icon needs to be 114x114 pixel and should be named "touch-icon-iphone-114.png".', 'pagelines' ),
+					'inputlabel'      => __( 'Upload your Apple touch icon for iPhone. The touch icon is the icon that your iPhone saves on the homescreen. The touch icon needs to be 114x114 pixel and should be named "touch-icon-iphone-114.png".', 'pagelines' ),
 				),
 				'touch_icon_ipad' => array(
 					'default'          => '',
 					'type'              => 'image_upload',
 					'imagepreview'      => '270',
-					'inputlabel'      => __( 'Upload your Apple touch icon for iPad.', 'pagelines' ),
-					'shortexp'          => __( 'The touch icon is the icon that your iPad saves on the homescreen. The touch icon needs to be 144x144 pixel and should be named "touch-icon-ipad-144.png".', 'pagelines' ),
+					'inputlabel'      => __( 'Upload your Apple touch icon for iPad. The touch icon is the icon that your iPad saves on the homescreen. The touch icon needs to be 144x144 pixel and should be named "touch-icon-ipad-144.png".', 'pagelines' ),
+				),
+				'splash_screen_iphone' => array(
+					'default'          => '',
+					'type'              => 'image_upload',
+					'imagepreview'      => '270',
+					'inputlabel'      => __( 'Upload your Apple splash screen image iPhone. The splash screen for iPhone shows up while your site is loading. The splash screen image needs to be 640x960 pixel and should be named "apple-touch-startup-image-640x920.png"', 'pagelines' ),
+				),
+				'splash_screen_ipad' => array(
+					'default'          => '',
+					'type'              => 'image_upload',
+					'imagepreview'      => '270',
+					'inputlabel'      => __( 'Upload your Apple splash screen image iPad. The splash screen for iPad shows up while your site is loading. The splash screen image needs to be 640x960 pixel and should be named "apple-touch-startup-image-1536x2008.png".', 'pagelines' ),
 				)
 			)
 		),
-
 		// add the apple touch icon to float left of the text
 		'pl_webapp_bubble_animation_in'  =>  array(
 			'default'  =>  'drop',
