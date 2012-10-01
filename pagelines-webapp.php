@@ -255,16 +255,6 @@ function pl_webapp_bubble_settings() {
 
 		///////Below is LESS settings////////////
 
-		// pick the color of the border
-		'pl_webapp_bubble_border_color' =>  array(
-			'default'   =>  '',
-			'version'   =>  'pro',
-			'type'    =>  'colorpicker',
-			'title'   =>  __('Border Color', 'pagelines'),
-			'inputlabel'  =>  __('Select the border color', 'pagelines'),
-			'shortexp'   =>  __('Select the color you would like your border around the button.', 'pagelines'),
-		),
-
 
 		// pick the color of the bold call to action
 		'pl_webapp_bubble_bold_color' =>  array(
@@ -278,15 +268,15 @@ function pl_webapp_bubble_settings() {
 		
 		'pl_webapp_border'          => array(                   
 
-                              'default'           => '#FFFFFF',
-
-                              'selectors'          =>     '.widget-pad',
-
-                              'flag'               => 'blank_default',
-
-                              'css_prop'          => 'background-color',
-
-                              'inputlabel'      => __( 'Widget Background (Optional)', 'pagelines' ),
+            'default'           => '#FFFFFF',
+            'selectors'          =>     '#addToHomeScreen .addToHomeTouchIcon',
+            'flag'               => 'blank_default',
+            'css_prop'          => 'border-color',
+			'version'   =>  'pro',
+			'type'    =>  'colorpicker',
+			'title'   =>  __('Border Color', 'pagelines'),
+			'inputlabel'  =>  __('Select the border color', 'pagelines'),
+			'shortexp'   =>  __('Select the color you would like your border around the button.', 'pagelines'),
 
                          ),
 
@@ -307,13 +297,12 @@ add_filter('pless_vars', 'pl_webapp_mixin');
 function pl_webapp_mixin( $constants ){
 
 
-     $pl_webapp_border = (ploption('pl_webapp_border')) ? ploption('pl_webapp_border') : '';
+     $pl_webapp_border = (ploption('pl_webapp_border'));
 
      $newvars = array(
 
-          'pl_webapp_border_color' => $widgetbg,
+          'pl_webapp_border' => $pl_webapp_border,
      );
-
 
      $lessvars = array_merge($newvars, $constants);
 
