@@ -16,7 +16,9 @@ function custom_less() {
 	$file = sprintf( '%sstyle.less', plugin_dir_path( __FILE__ ) );
 	pagelines_insert_core_less( $file );
 }
+
 add_action( 'template_redirect', 'custom_less' );
+
 
 //function for loading the bookmark_bubble.js.
 add_action( 'wp_enqueue_scripts', 'pl_webapp_load_js' );
@@ -267,11 +269,7 @@ function pl_webapp_bubble_settings() {
 		),
 		
 		'pl_webapp_border'          => array(                   
-
-            'default'           => '#FFFFFF',
-            'selectors'          =>     '#addToHomeScreen .addToHomeTouchIcon',
-            'flag'               => 'blank_default',
-            'css_prop'          => 'border-color',
+			'default'   =>  '',
 			'version'   =>  'pro',
 			'type'    =>  'colorpicker',
 			'title'   =>  __('Border Color', 'pagelines'),
@@ -297,11 +295,13 @@ add_filter('pless_vars', 'pl_webapp_mixin');
 function pl_webapp_mixin( $constants ){
 
 
-     $pl_webapp_border = (ploption('pl_webapp_border'));
+     $pl_webapp_border = (ploption('pl_webapp_border')) ? ploption('pl_webapp_border') : '@dark-base';
+     $pl_webapp_bubble_bold_color = (ploption('pl_webapp_bubble_bold_color')) ? ploption('pl_webapp_bubble_bold_color') : '@dark-base';
 
      $newvars = array(
 
           'pl_webapp_border' => $pl_webapp_border,
+          'pl_webapp_bubble_bold_color' => $pl_webapp_bubble_bold_color,
      );
 
      $lessvars = array_merge($newvars, $constants);
