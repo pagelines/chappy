@@ -275,9 +275,49 @@ function pl_webapp_bubble_settings() {
 			'inputlabel'  =>  __('Select the Call to Action Text color', 'pagelines'),
 			'shortexp'   =>  __('Select the color you would like your call to action text to be.', 'pagelines'),
 		),
+		
+		'pl_webapp_border'          => array(                   
+
+                              'default'           => '#FFFFFF',
+
+                              'selectors'          =>     '.widget-pad',
+
+                              'flag'               => 'blank_default',
+
+                              'css_prop'          => 'background-color',
+
+                              'inputlabel'      => __( 'Widget Background (Optional)', 'pagelines' ),
+
+                         ),
+
+
 
 	);
 
 	// add options page to pagelines settings
 	pl_add_options_page( array( 'name' => 'pl_webapp_bubble', 'array' => $options ) );
 }
+
+
+
+// add less support for PageLines plugin
+
+add_filter('pless_vars', 'pl_webapp_mixin');
+
+function pl_webapp_mixin( $constants ){
+
+
+     $pl_webapp_border = (ploption('pl_webapp_border')) ? ploption('pl_webapp_border') : '';
+
+     $newvars = array(
+
+          'pl_webapp_border_color' => $widgetbg,
+     );
+
+
+     $lessvars = array_merge($newvars, $constants);
+
+     return $lessvars;
+
+}
+
