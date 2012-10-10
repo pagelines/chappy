@@ -258,7 +258,7 @@ function pl_webapp_bubble_settings() {
 		///////Below is LESS settings////////////
 
 
-		// pick the color of the bold call to action
+		// select the color of the bold call to action
 		'pl_webapp_bubble_bold_color' =>  array(
 			'default'   =>  '',
 			'version'   =>  'pro',
@@ -268,6 +268,8 @@ function pl_webapp_bubble_settings() {
 			'shortexp'   =>  __('Select the color you would like your call to action text to be.', 'pagelines'),
 		),
 		
+		
+		//select the color of the border
 		'pl_webapp_border'          => array(                   
 			'default'   =>  '',
 			'version'   =>  'pro',
@@ -275,6 +277,18 @@ function pl_webapp_bubble_settings() {
 			'title'   =>  __('Border Color', 'pagelines'),
 			'inputlabel'  =>  __('Select the border color', 'pagelines'),
 			'shortexp'   =>  __('Select the color you would like your border around the button.', 'pagelines'),
+
+                         ),
+                         
+                         
+        //select the background color
+		'pl_webapp_bg'          => array(                   
+			'default'   =>  '',
+			'version'   =>  'pro',
+			'type'    =>  'colorpicker',
+			'title'   =>  __('Background Color', 'pagelines'),
+			'inputlabel'  =>  __('Select the background color', 'pagelines'),
+			'shortexp'   =>  __('Select the color you would like your background of the bubble.', 'pagelines'),
 
                          ),
 
@@ -299,11 +313,15 @@ function pl_webapp_mixin( $constants ){
      
      //define the bubble text color
      $pl_webapp_bubble_bold_color = (ploption('pl_webapp_bubble_bold_color')) ? ploption('pl_webapp_bubble_bold_color') : '@dark-base';
+     
+     //define the background color
+     $pl_webapp_bg = (ploption('pl_webapp_bg')) ? ploption('pl_webapp_bg') : '@dark-base';
 
      $newvars = array(
 
-          'pl_webapp_border' => $pl_webapp_border,
+          'pl_webapp_border' 			=> $pl_webapp_border,
           'pl_webapp_bubble_bold_color' => $pl_webapp_bubble_bold_color,
+          'pl_webapp_bg'				=> $pl_webapp_bg,
      );
 
      $lessvars = array_merge($newvars, $constants);
