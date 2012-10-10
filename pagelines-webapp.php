@@ -294,8 +294,10 @@ add_filter('pless_vars', 'pl_webapp_mixin');
 
 function pl_webapp_mixin( $constants ){
 
-
+	 //define the border color varible
      $pl_webapp_border = (ploption('pl_webapp_border')) ? ploption('pl_webapp_border') : '@dark-base';
+     
+     //define the bubble text color
      $pl_webapp_bubble_bold_color = (ploption('pl_webapp_bubble_bold_color')) ? ploption('pl_webapp_bubble_bold_color') : '@dark-base';
 
      $newvars = array(
