@@ -278,8 +278,7 @@ function pl_webapp_bubble_settings() {
 			'inputlabel'  =>  __('Select the border color', 'pagelines'),
 			'shortexp'   =>  __('Select the color you would like your border around the button.', 'pagelines'),
 
-                         ),
-                         
+                         ),               
                          
         //select the background color
 		'pl_webapp_bg'          => array(                   
@@ -302,7 +301,7 @@ function pl_webapp_bubble_settings() {
 
 
 
-// add less support for PageLines plugin
+// add less for PageLines plugin
 
 add_filter('pless_vars', 'pl_webapp_mixin');
 
