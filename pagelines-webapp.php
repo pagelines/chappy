@@ -19,35 +19,14 @@ function custom_less() {
 
 add_action( 'template_redirect', 'custom_less' );
 
+
 //function for loading the bookmark_bubble.js.
 add_action( 'wp_enqueue_scripts', 'pl_webapp_load_js' );
 
 function pl_webapp_load_js() {
 
-	if (ploption( 'pl_webapp_bubble_is_frontpage' )) {
-		if (is_front_page()){
-
-			wp_enqueue_script( 'pl-webapp-load', plugins_url('/pagelines-webapp-settings-load.js', __FILE__));
-
-			//used to pass settings into js. (taken from social excerpts http://www.pagelines.com/store/plugins/social-excerpts/)
-
-			wp_localize_script( 'pl-webapp-load', 'pl_webapp_load', array(
-
-					'param_pl_webapp_bubble_replace_message'   => ploption( 'pl_webapp_bubble_replace_message' ) ,
-					'param_pl_webapp_bubble_animation_in'    => ploption( 'pl_webapp_bubble_animation_in' ) ,
-					'param_pl_webapp_bubble_animation_out'    => ploption( 'pl_webapp_bubble_animation_out' ) ,
-					'param_pl_webapp_bubble_start_delay'    => ploption( 'pl_webapp_bubble_start_delay' ) ,
-					'param_pl_webapp_bubble_lifespan'     => ploption( 'pl_webapp_bubble_lifespan' ) ,
-					'param_pl_webapp_bubble_often_show'    => ploption( 'pl_webapp_bubble_often_show' ) ,
-					'param_pl_webapp_bubble_arrow'      => ploption( 'pl_webapp_bubble_arrow' ) ,
-					'param_pl_webapp_bubble_returning_visitor'  => ploption( 'pl_webapp_bubble_returning_visitor')
-
-				));
-
-			wp_enqueue_script( 'pl-webapp-bubble', plugins_url('/add2home.js', __FILE__));
-
-		}
-	} else {
+if (ploption( 'pl_webapp_bubble_is_frontpage' )) {
+	if (is_front_page()){
 
 		wp_enqueue_script( 'pl-webapp-load', plugins_url('/pagelines-webapp-settings-load.js', __FILE__));
 
@@ -55,20 +34,43 @@ function pl_webapp_load_js() {
 
 		wp_localize_script( 'pl-webapp-load', 'pl_webapp_load', array(
 
-				'param_pl_webapp_bubble_replace_message'   => ploption( 'pl_webapp_bubble_replace_message' ) ,
-				'param_pl_webapp_bubble_animation_in'    => ploption( 'pl_webapp_bubble_animation_in' ) ,
-				'param_pl_webapp_bubble_animation_out'    => ploption( 'pl_webapp_bubble_animation_out' ) ,
-				'param_pl_webapp_bubble_start_delay'    => ploption( 'pl_webapp_bubble_start_delay' ) ,
-				'param_pl_webapp_bubble_lifespan'     => ploption( 'pl_webapp_bubble_lifespan' ) ,
-				'param_pl_webapp_bubble_often_show'    => ploption( 'pl_webapp_bubble_often_show' ) ,
-				'param_pl_webapp_bubble_arrow'      => ploption( 'pl_webapp_bubble_arrow' ) ,
-				'param_pl_webapp_bubble_returning_visitor'  => ploption( 'pl_webapp_bubble_returning_visitor')
+			'param_pl_webapp_bubble_replace_message'   => ploption( 'pl_webapp_bubble_replace_message' ) ,
+			'param_pl_webapp_bubble_animation_in'    => ploption( 'pl_webapp_bubble_animation_in' ) ,
+			'param_pl_webapp_bubble_animation_out'    => ploption( 'pl_webapp_bubble_animation_out' ) ,
+			'param_pl_webapp_bubble_start_delay'    => ploption( 'pl_webapp_bubble_start_delay' ) ,
+			'param_pl_webapp_bubble_lifespan'     => ploption( 'pl_webapp_bubble_lifespan' ) ,
+			'param_pl_webapp_bubble_often_show'    => ploption( 'pl_webapp_bubble_often_show' ) ,
+			'param_pl_webapp_bubble_arrow'      => ploption( 'pl_webapp_bubble_arrow' ) ,
+			'param_pl_webapp_bubble_returning_visitor'  => ploption( 'pl_webapp_bubble_returning_visitor')
 
-			));
+		));
 
 		wp_enqueue_script( 'pl-webapp-bubble', plugins_url('/add2home.js', __FILE__));
 
 	}
+} else {
+
+	wp_enqueue_script( 'pl-webapp-load', plugins_url('/pagelines-webapp-settings-load.js', __FILE__));
+
+	//used to pass settings into js. (taken from social excerpts http://www.pagelines.com/store/plugins/social-excerpts/)
+
+	wp_localize_script( 'pl-webapp-load', 'pl_webapp_load', array(
+
+		'param_pl_webapp_bubble_replace_message'   => ploption( 'pl_webapp_bubble_replace_message' ) ,
+		'param_pl_webapp_bubble_animation_in'    => ploption( 'pl_webapp_bubble_animation_in' ) ,
+		'param_pl_webapp_bubble_animation_out'    => ploption( 'pl_webapp_bubble_animation_out' ) ,
+		'param_pl_webapp_bubble_start_delay'    => ploption( 'pl_webapp_bubble_start_delay' ) ,
+		'param_pl_webapp_bubble_lifespan'     => ploption( 'pl_webapp_bubble_lifespan' ) ,
+		'param_pl_webapp_bubble_often_show'    => ploption( 'pl_webapp_bubble_often_show' ) ,
+		'param_pl_webapp_bubble_arrow'      => ploption( 'pl_webapp_bubble_arrow' ) ,
+		'param_pl_webapp_bubble_returning_visitor'  => ploption( 'pl_webapp_bubble_returning_visitor')
+
+	));
+
+	wp_enqueue_script( 'pl-webapp-bubble', plugins_url('/add2home.js', __FILE__));
+
+}
+
 
 }
 
@@ -79,32 +81,29 @@ function pl_webapp_meta() {
 	echo '<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0">';
 
 	// Of course it is advisable to have touch icons ready for each device
-	//<!-- Standard iPhone -->
+	//<!-- Standard iPhone --> 
 	if (ploption('touch_icon_iphone')) printf('<link rel="apple-touch-icon" sizes="57x57" href="%s" />', ploption( 'touch_icon_iphone' )) ;
-	//<!-- Retina iPhone -->
+	//<!-- Retina iPhone --> 
 	if (ploption('touch_icon_iphone')) printf('<link rel="apple-touch-icon" sizes="114x114" href="%s" />', ploption( 'touch_icon_iphone' )) ;
-	//<!-- Standard iPad -->
+	//<!-- Standard iPad --> 
 	if (ploption('touch_icon_ipad')) printf('<link rel="apple-touch-icon" sizes="72x72" href="%s" />', ploption( 'touch_icon_ipad' )) ;
-	//<!-- Retina iPad -->
+	//<!-- Retina iPad --> 
 	if (ploption('touch_icon_ipad')) printf('<link rel="apple-touch-icon" sizes="144x144" href="%s" />', ploption( 'touch_icon_ipad' )) ;
-
+	
 	//Splash screen
 	//<!-- iPhone (Retina) SPLASHSCREEN-->
-	if (ploption('splash_screen_iphone')) printf('<link href="%s" media="(device-width: 320px) and (-webkit-device-pixel-ratio: 2)" rel="apple-touch-startup-image">', ploption( 'splash_screen_iphone' )) ;
+	if (ploption('splash_screen_iphone')) printf ('<link href="%s" media="(device-width: 320px) and (-webkit-device-pixel-ratio: 2)" rel="apple-touch-startup-image">', ploption( 'splash_screen_iphone' )) ;
 	//<!-- iPad (Retina, portrait) SPLASHSCREEN-->
-	if (ploption('splash_screen_ipad')) printf('<link href="%s" media="(device-width: 1536px) and (orientation: portrait) and (-webkit-device-pixel-ratio: 2)" rel="apple-touch-startup-image">', ploption( 'splash_screen_ipad' )) ;
-
+	if (ploption('splash_screen_ipad')) printf ('<link href="%s" media="(device-width: 1536px) and (orientation: portrait) and (-webkit-device-pixel-ratio: 2)" rel="apple-touch-startup-image">', ploption( 'splash_screen_ipad' )) ;
+	
 }
 
 // registration of settings: (taken from social excerpts http://www.pagelines.com/store/plugins/social-excerpts/)
 // add action to settings
-
 add_action( 'admin_init', 'pl_webapp_bubble_settings' );
-
 /**
  * Function for loading custom settings
  */
-
 function pl_webapp_bubble_settings() {
 	// settings icon path
 	$icon_path = sprintf( '%s/%s', WP_PLUGIN_URL, basename(dirname( __FILE__ )));
@@ -114,6 +113,7 @@ function pl_webapp_bubble_settings() {
 		'icon' => $icon_path . '/icon.png',
 
 		///////////Below are meta settings/////////
+
 
 
 		///////////Below are js settings/////////
@@ -135,7 +135,7 @@ function pl_webapp_bubble_settings() {
 			'type'   =>  'check',
 			'inputlabel'  =>  __('Only show on frontpage?', 'pagelines'),
 			'title'      =>  __('Show on frontpage', 'pagelines' ),
-			'exp' => __('Checking this option will do so the balloon is only showed on frontpage!','pagelines'),
+			'exp'	=>	__('Checking this option will do so the balloon is only showed on frontpage!','pagelines'),
 		),
 
 		'pl_webapp_bubble_returning_visitor'  =>  array(
@@ -153,7 +153,7 @@ function pl_webapp_bubble_settings() {
 		'touch_icons'   => array(
 			'default'    => '',
 			'type'     => 'multi_option',
-			'title'     =>  __('Images', 'pagelines'),
+			'title'     =>  __('Images', 'pagelines'),							
 			'selectvalues'   => array(
 				'touch_icon_iphone' => array(
 					'default'          => '',
@@ -267,15 +267,10 @@ function pl_webapp_bubble_settings() {
 			'inputlabel'  =>  __('Select the Call to Action Text color', 'pagelines'),
 			'shortexp'   =>  __('Select the color you would like your call to action text to be.', 'pagelines'),
 		),
-<<<<<<< HEAD
 		
 		
 		//select the color of the border
 		'pl_webapp_border'          => array(                   
-=======
-
-		'pl_webapp_border' => array(
->>>>>>> cleanup
 			'default'   =>  '',
 			'version'   =>  'pro',
 			'type'    =>  'colorpicker',
@@ -283,7 +278,6 @@ function pl_webapp_bubble_settings() {
 			'inputlabel'  =>  __('Select the border color', 'pagelines'),
 			'shortexp'   =>  __('Select the color you would like your border around the button.', 'pagelines'),
 
-<<<<<<< HEAD
                          ),               
                          
         //select the background color
@@ -298,9 +292,6 @@ function pl_webapp_bubble_settings() {
                          ),
 
 
-=======
-		),
->>>>>>> cleanup
 
 	);
 
@@ -308,19 +299,14 @@ function pl_webapp_bubble_settings() {
 	pl_add_options_page( array( 'name' => 'pl_webapp_bubble', 'array' => $options ) );
 }
 
-<<<<<<< HEAD
 
 
 // add less for PageLines plugin
-=======
-// add less support for PageLines plugin
->>>>>>> cleanup
 
 add_filter('pless_vars', 'pl_webapp_mixin');
 
 function pl_webapp_mixin( $constants ){
 
-<<<<<<< HEAD
 	 //define the border color varible
      $pl_webapp_border = (ploption('pl_webapp_border')) ? ploption('pl_webapp_border') : '@dark-base';
      
@@ -329,27 +315,17 @@ function pl_webapp_mixin( $constants ){
      
      //define the background color
      $pl_webapp_bg = (ploption('pl_webapp_bg')) ? ploption('pl_webapp_bg') : '@dark-base';
-=======
 
-	$pl_webapp_border = (ploption('pl_webapp_border')) ? ploption('pl_webapp_border') : '@dark-base';
-	$pl_webapp_bubble_bold_color = (ploption('pl_webapp_bubble_bold_color')) ? ploption('pl_webapp_bubble_bold_color') : '@dark-base';
->>>>>>> cleanup
+     $newvars = array(
 
-	$newvars = array(
-
-<<<<<<< HEAD
           'pl_webapp_border' 			=> $pl_webapp_border,
           'pl_webapp_bubble_bold_color' => $pl_webapp_bubble_bold_color,
           'pl_webapp_bg'				=> $pl_webapp_bg,
      );
-=======
-		'pl_webapp_border' => $pl_webapp_border,
-		'pl_webapp_bubble_bold_color' => $pl_webapp_bubble_bold_color,
-	);
->>>>>>> cleanup
 
-	$lessvars = array_merge($newvars, $constants);
+     $lessvars = array_merge($newvars, $constants);
 
-	return $lessvars;
+     return $lessvars;
 
 }
+
