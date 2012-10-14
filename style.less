@@ -3,6 +3,11 @@
  * Main container
  *
  */
+
+@pl_webapp_bg_dark:@pl_webapp_bg;
+@pl_webapp_bg_medium: lighten(@pl_webapp_bg, 10%);
+@pl_webapp_bg_light:lighten(@pl_webapp_bg, 20%);
+
 #addToHomeScreen {
 	z-index:9999;
 	-webkit-user-select:none;
@@ -12,8 +17,8 @@
 	padding:12px 14px;
 	text-align:left;
 	font-family:helvetica;
-	background-image: @pl_webapp_bg;
-	border:1px solid #505050;
+	background-image:-webkit-gradient(linear,0 0,0 100%,color-stop(0,#fff),color-stop(0.02,@pl_webapp_bg_light),color-stop(0.98,@pl_webapp_bg_medium),color-stop(1,@pl_webapp_bg_dark));
+	border:1px solid @pl_webapp_border;
 	-webkit-border-radius:8px;
 	-webkit-background-clip:padding-box;
 	color: @pl_webapp_bubble_bold_color;
@@ -50,10 +55,10 @@
  */
 #addToHomeScreen .addToHomeArrow {
 	position:absolute;
-	background-image:-webkit-gradient(linear,0 0,100% 100%,color-stop(0,rgba(204,204,204,0)),color-stop(0.4,rgba(204,204,204,0)),color-stop(0.4,#ccc));
+	background-image:-webkit-gradient(linear,0 0,100% 100%,color-stop(0,@pl_webapp_bg_medium),color-stop(0.4,@pl_webapp_bg_medium),color-stop(0.4,@pl_webapp_bg_medium));
 	border-width:0 1px 1px 0;
 	border-style:solid;
-	border-color:#505050;
+	border-color:@pl_webapp_border;
 	width:16px; height:16px;
 	-webkit-transform:rotateZ(45deg);
 	bottom:-9px; left:50%;

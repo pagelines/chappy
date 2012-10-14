@@ -77,9 +77,7 @@ if (ploption( 'pl_webapp_bubble_is_frontpage' )) {
 add_action( 'pagelines_head', 'pl_webapp_meta');
 
 function pl_webapp_meta() {
-
-	echo '<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0">';
-	
+		
 	// Of course it is advisable to have touch icons ready for each device
 	//<!-- Standard iPhone --> 
 	if (ploption('touch_icon_iphone')) printf('<link rel="apple-touch-icon" sizes="57x57" href="%s" />', ploption( 'touch_icon_iphone' )) ;
@@ -99,6 +97,10 @@ function pl_webapp_meta() {
 	
 	//<!-- iPad (Retina, portrait) SPLASHSCREEN-->
 	if (ploption('splash_screen_ipad')) printf ('<link href="%s" media="(device-width: 1536px) and (orientation: portrait) and (-webkit-device-pixel-ratio: 2)" rel="apple-touch-startup-image">', ploption( 'splash_screen_ipad' )) ;
+	
+	echo '<meta name="apple-mobile-web-app-capable" content="yes">';
+	
+	echo '<meta name="apple-mobile-web-app-status-bar-style" content="black">';
 	
 }
 
@@ -128,7 +130,9 @@ function pl_webapp_bubble_settings() {
 			'type'	=>	'text',
 			'inputlabel'	 =>	 __('Your Text to Replace the Default Message. (this will override the language option)', 'pagelines'),
 			'title'		=>	__('Custom message', 'pagelines' ),
-			'shortexp'	=>	__('Add your own custom text to replace the standard message verbiage with your own.  Example replacement: This is a custom message. Your device is an <strong>%device</strong>. The action icon is %icon.', 'pagelines'),
+			'shortexp'	=>	__('Add your own custom text to replace the standard message verbiage with your own.  ', 'pagelines'),
+			'exp'	=>	__('Example replacement: This is a custom message. Your device is an <strong>%device</strong>. The action icon is %icon.','pagelines'),
+
 		),
 
 		'pl_webapp_bubble_is_frontpage'  =>  array(
@@ -148,39 +152,42 @@ function pl_webapp_bubble_settings() {
 			),
 			'inputlabel'	 =>	 __('Only show to returning visitors?', 'pagelines'),
 			'title'		=>	__('Returnign visitors', 'pagelines' ),
-			'shortexp'	=>	__('Show the balloon to returning visitors only (setting this to true is HIGHLY RECCOMENDED)', 'pagelines'),
+			'shortexp'	=>	__('Show the balloon to returning visitors only.', 'pagelines'),
+			'exp'	=>	__('Will not show to visitors who visits first time, but will do to visitors who visits second time. (Setting this to true is HIGHLY RECCOMENDED)','pagelines'),
+
 		),
 		'pl_webapp_images'   => array(
 			'default'	=> '',
 			'type'	  => 'image_upload_multi',
-			'title'	   =>  __('Images', 'pagelines'),							
+			'title'	   =>  __('Images', 'pagelines'),
+			'exp'	=>	__('The touch icon is the icon that your iPhone saves on the homescreen. The touch icon needs to be 114x114. </br></br></br> The touch icon is the icon that your iPad saves on the homescreen. The touch icon needs to be 144x144 pixel. </br></br></br> The splash screen for iPhone shows up while your site is loading. The splash screen image needs to be 640x960 pixel. </br></br></br> The splash screen for iPad shows up while your site is loading. The splash screen image needs to be 1536x2008.','pagelines'),		
 			'selectvalues'	=> array(
 				'touch_icon_iphone' => array(
 					'default'			=> '',
 					'type'				 => 'image_upload',
 					'imagepreview'		 => '270',
-					'inputlabel'	   => __( 'Upload your Apple touch icon for iPhone. The touch icon is the icon that your iPhone saves on the homescreen. The touch icon needs to be 114x114..', 'pagelines' ),
+					'inputlabel'	   => __( 'Upload your Apple touch icon for iPhone.', 'pagelines' ),
 				),
 				
 				'touch_icon_ipad' => array(
 					'default'			=> '',
 					'type'				 => 'image_upload',
 					'imagepreview'		 => '270',
-					'inputlabel'	   => __( 'Upload your Apple touch icon for iPad. The touch icon is the icon that your iPad saves on the homescreen. The touch icon needs to be 144x144 pixel.', 'pagelines' ),
+					'inputlabel'	   => __( 'Upload your Apple touch icon for iPad.', 'pagelines' ),
 				),
 				
 				'splash_screen_iphone' => array(
 					'default'			=> '',
 					'type'				 => 'image_upload',
 					'imagepreview'		 => '270',
-					'inputlabel'	   => __( 'Upload your Apple splash screen image iPhone. The splash screen for iPhone shows up while your site is loading. The splash screen image needs to be 640x960 pixel.', 'pagelines' ),
+					'inputlabel'	   => __( 'Upload your Apple splash screen image iPhone.', 'pagelines' ),
 				),
 				
 				'splash_screen_ipad' => array(
 					'default'			=> '',
 					'type'				 => 'image_upload',
 					'imagepreview'		 => '270',
-					'inputlabel'	   => __( 'Upload your Apple splash screen image iPad. The splash screen for iPad shows up while your site is loading. The splash screen image needs to be 1536x2008.', 'pagelines' ),
+					'inputlabel'	   => __( 'Upload your Apple splash screen image iPad.', 'pagelines' ),
 				)
 			)
 		),
@@ -232,7 +239,7 @@ function pl_webapp_bubble_settings() {
 				'type'	  =>  'text',
 				'title'	  =>  __('Length The Button Stays On The Screen', 'pagelines'),
 				'inputlabel'  =>  __('Enter in ms', 'pagelines'),
-				'shortexp'	 =>	 __('Enter the ms you would like the button to stay on the screen before it automatically closes.  The default is 150000ms ', 'pagelines'),
+				'shortexp'	 =>	 __('Enter the ms you would like the button to stay on the screen before it automatically closes.  The default is 15000ms ', 'pagelines'),
 			),
 
 		// edit how often the button is shown
@@ -241,7 +248,7 @@ function pl_webapp_bubble_settings() {
 				'type'	  =>  'text',
 				'title'	  =>  __('How Often The Button Appears', 'pagelines'),
 				'inputlabel'  =>  __('Enter in mins', 'pagelines'),
-				'shortexp'	 =>	 __('Enter the mins you would like the button to delay before the button shows again.  The default is 240mins.', 'pagelines'),
+				'shortexp'	 =>	 __('Enter the mins you would like the button to delay before the button shows again. The default is 0mins which means everytime.', 'pagelines'),
 			),
 
 		// add the apple touch icon to float left of the text
@@ -307,13 +314,13 @@ add_filter('pless_vars', 'pl_webapp_mixin');
 function pl_webapp_mixin( $constants ){
 
 	 //define the border color varible
-	 $pl_webapp_border = (ploption('pl_webapp_border')) ? ploption('pl_webapp_border') : '@dark-base';
+	 $pl_webapp_border = (ploption('pl_webapp_border')) ? ploption('pl_webapp_border') : '#505050';
 	 
 	 //define the bubble text color
-	 $pl_webapp_bubble_bold_color = (ploption('pl_webapp_bubble_bold_color')) ? ploption('pl_webapp_bubble_bold_color') : '@dark-base';
+	 $pl_webapp_bubble_bold_color = (ploption('pl_webapp_bubble_bold_color')) ? ploption('pl_webapp_bubble_bold_color') : '#333';
 	 
 	 //define the background color
-	 $pl_webapp_bg = (ploption('pl_webapp_bg')) ? ploption('pl_webapp_bg') : '@dark-base';
+	 $pl_webapp_bg = (ploption('pl_webapp_bg')) ? ploption('pl_webapp_bg') : '#a3a3a3';
 
 	 $newvars = array(
 
