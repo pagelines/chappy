@@ -98,7 +98,6 @@ function pl_webapp_meta() {
 	//<!-- iPad (Retina, portrait) SPLASHSCREEN-->
 	if (ploption('splash_screen_ipad')) printf ('<link href="%s" media="(device-width: 1536px) and (orientation: portrait) and (-webkit-device-pixel-ratio: 2)" rel="apple-touch-startup-image">', ploption( 'splash_screen_ipad' )) ;
 	
-	echo '<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0">';
 	
 	echo '<meta name="apple-mobile-web-app-capable" content="yes">';
 	
