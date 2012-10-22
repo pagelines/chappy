@@ -89,15 +89,7 @@ function pl_webapp_meta() {
 	if (ploption('touch_icon_ipad')) printf('<link rel="apple-touch-icon" sizes="72x72" href="%s" />', ploption( 'touch_icon_ipad' )) ;
 	
 	//<!-- Retina iPad --> 
-	if (ploption('touch_icon_ipad')) printf('<link rel="apple-touch-icon" sizes="144x144" href="%s" />', ploption( 'touch_icon_ipad' )) ;
-	
-	//Splash screen
-	//<!-- iPhone (Retina) SPLASHSCREEN-->
-//	if (ploption('splash_screen_iphone')) printf ('<link href="%s" media="(device-width: 320px) and (-webkit-device-pixel-ratio: 2)" rel="apple-touch-startup-image">', ploption( 'splash_screen_iphone' )) ;
-	
-	//<!-- iPad (Retina, portrait) SPLASHSCREEN-->
-//	if (ploption('splash_screen_ipad')) printf ('<link href="%s" media="(device-width: 1536px) and (orientation: portrait) and (-webkit-device-pixel-ratio: 2)" rel="apple-touch-startup-image">', ploption( 'splash_screen_ipad' )) ;
-	
+	if (ploption('touch_icon_ipad')) printf('<link rel="apple-touch-icon" sizes="144x144" href="%s" />', ploption( 'touch_icon_ipad' )) ;	
 	
 	echo '<meta name="apple-mobile-web-app-capable" content="yes">';
 	
@@ -176,21 +168,6 @@ function pl_webapp_bubble_settings() {
 					'imagepreview'		 => '270',
 					'inputlabel'	   => __( 'Upload your Apple touch icon for iPad.', 'pagelines' ),
 				)
-//				,
-				
-//				'splash_screen_iphone' => array(
-//					'default'			=> '',
-//					'type'				 => 'image_upload',
-//					'imagepreview'		 => '270',
-//					'inputlabel'	   => __( 'Upload your Apple splash screen image iPhone.', 'pagelines' ),
-//				),
-				
-//				'splash_screen_ipad' => array(
-//					'default'			=> '',
-//					'type'				 => 'image_upload',
-//					'imagepreview'		 => '270',
-//					'inputlabel'	   => __( 'Upload your Apple splash screen image iPad.', 'pagelines' ),
-//				)
 			)
 		),
 
