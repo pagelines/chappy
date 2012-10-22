@@ -93,10 +93,10 @@ function pl_webapp_meta() {
 	
 	//Splash screen
 	//<!-- iPhone (Retina) SPLASHSCREEN-->
-	if (ploption('splash_screen_iphone')) printf ('<link href="%s" media="(device-width: 320px) and (-webkit-device-pixel-ratio: 2)" rel="apple-touch-startup-image">', ploption( 'splash_screen_iphone' )) ;
+//	if (ploption('splash_screen_iphone')) printf ('<link href="%s" media="(device-width: 320px) and (-webkit-device-pixel-ratio: 2)" rel="apple-touch-startup-image">', ploption( 'splash_screen_iphone' )) ;
 	
 	//<!-- iPad (Retina, portrait) SPLASHSCREEN-->
-	if (ploption('splash_screen_ipad')) printf ('<link href="%s" media="(device-width: 1536px) and (orientation: portrait) and (-webkit-device-pixel-ratio: 2)" rel="apple-touch-startup-image">', ploption( 'splash_screen_ipad' )) ;
+//	if (ploption('splash_screen_ipad')) printf ('<link href="%s" media="(device-width: 1536px) and (orientation: portrait) and (-webkit-device-pixel-ratio: 2)" rel="apple-touch-startup-image">', ploption( 'splash_screen_ipad' )) ;
 	
 	
 	echo '<meta name="apple-mobile-web-app-capable" content="yes">';
@@ -161,7 +161,7 @@ function pl_webapp_bubble_settings() {
 			'default'	=> '',
 			'type'	  => 'image_upload_multi',
 			'title'	   =>  __('Images', 'pagelines'),
-			'exp'	=>	__('The touch icon is the icon that your iPhone saves on the homescreen. The touch icon needs to be 114x114. </br></br></br> The touch icon is the icon that your iPad saves on the homescreen. The touch icon needs to be 144x144 pixel. </br></br></br> The splash screen for iPhone shows up while your site is loading. The splash screen image needs to be 640x960 pixel. </br></br></br> The splash screen for iPad shows up while your site is loading. The splash screen image needs to be 1536x2008.','pagelines'),		
+			'exp'	=>	__('The touch icon is the icon that your iPhone saves on the homescreen. The touch icon needs to be 114x114. </br></br></br> The touch icon is the icon that your iPad saves on the homescreen. The touch icon needs to be 144x144 pixel.','pagelines'),		
 			'selectvalues'	=> array(
 				'touch_icon_iphone' => array(
 					'default'			=> '',
@@ -175,21 +175,22 @@ function pl_webapp_bubble_settings() {
 					'type'				 => 'image_upload',
 					'imagepreview'		 => '270',
 					'inputlabel'	   => __( 'Upload your Apple touch icon for iPad.', 'pagelines' ),
-				),
-				
-				'splash_screen_iphone' => array(
-					'default'			=> '',
-					'type'				 => 'image_upload',
-					'imagepreview'		 => '270',
-					'inputlabel'	   => __( 'Upload your Apple splash screen image iPhone.', 'pagelines' ),
-				),
-				
-				'splash_screen_ipad' => array(
-					'default'			=> '',
-					'type'				 => 'image_upload',
-					'imagepreview'		 => '270',
-					'inputlabel'	   => __( 'Upload your Apple splash screen image iPad.', 'pagelines' ),
 				)
+//				,
+				
+//				'splash_screen_iphone' => array(
+//					'default'			=> '',
+//					'type'				 => 'image_upload',
+//					'imagepreview'		 => '270',
+//					'inputlabel'	   => __( 'Upload your Apple splash screen image iPhone.', 'pagelines' ),
+//				),
+				
+//				'splash_screen_ipad' => array(
+//					'default'			=> '',
+//					'type'				 => 'image_upload',
+//					'imagepreview'		 => '270',
+//					'inputlabel'	   => __( 'Upload your Apple splash screen image iPad.', 'pagelines' ),
+//				)
 			)
 		),
 
