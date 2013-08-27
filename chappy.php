@@ -25,7 +25,7 @@ $license_key = trim( get_option( 'ah_chappy_license_key' ) );
 
 // setup the updater
 $edd_updater = new EDD_SL_Plugin_Updater( AH_CHAPPY_STORE_URL, __FILE__, array(
-		'version' 	=> '69.1', 				// current version number
+		'version' 	=> '69.2', 				// current version number
 		'license' 	=> $license_key, 		// license key (used get_option above to retrieve from DB)
 		'item_name' => AH_CHAPPY_NAME, 		// name of this plugin
 		'author' 	=> 'Aleksander Hansson' // author of this plugin
