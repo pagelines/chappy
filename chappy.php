@@ -2,18 +2,21 @@
 /*
 Plugin Name: Chappy, The Cheap Web App
 Description: Turn Your PageLines Site Into an iPhone Web App! Over 12 Different Options, Customize the the Image Added to the iPhone Homescrean, Customize Everything About the Pop Up & Advance Behavior Control.
-Version: 69.4
+Version: 69.6
 Author: Aleksander Hansson & Mike Zielonka
 Author URI: http://chappy.ahansson.com/developers/
 Plugin URI: http://chappy.ahansson.com/
 Demo: http://chappy.ahansson.com/
 Tags: extension
 V3: true
+PageLines: true
 */
 
 class Chappy {
 
 	function __construct() {
+
+		add_filter( 'pless_vars', array( &$this, 'mixins' ) );
 
 		add_action( 'template_redirect', array( &$this, 'custom_less' ) );
 
@@ -21,11 +24,15 @@ class Chappy {
 
 		add_action( 'pagelines_head', array( &$this, 'meta' ) );
 
-		add_action( 'wp_head', array( &$this, 'js_settings' ) );
+		add_action( 'pagelines_head', array( &$this, 'js_settings' ) );
 
-		add_filter( 'pless_vars', array( &$this, 'mixins' ) );
+		add_action( 'init', array( &$this, 'init' ) );
 
-		add_action( 'init', array( &$this, 'settings' ) );
+	}
+
+	function init() {
+
+		add_filter( 'pl_settings_array', array(&$this, 'options') );
 
 	}
 
@@ -36,7 +43,7 @@ class Chappy {
 
 	function js() {
 
-		if (ploption( 'pl_webapp_bubble_is_frontpage' )) {
+		if (pl_setting( 'pl_webapp_bubble_is_frontpage' )) {
 
 			if (is_front_page()) {
 
@@ -64,27 +71,6 @@ class Chappy {
 
 	function meta() {
 
-		// Of course it is advisable to have touch icons ready for each device
-		//<!-- Standard iPhone -->
-		if (ploption('touch_icon_iphone')) {
-			printf('<link rel="apple-touch-icon" sizes="57x57" href="%s" />', ploption( 'touch_icon_iphone' )) ;
-		}
-
-		//<!-- Retina iPhone -->
-		if (ploption('touch_icon_iphone')) {
-			printf('<link rel="apple-touch-icon" sizes="114x114" href="%s" />', ploption( 'touch_icon_iphone' )) ;
-		}
-
-		//<!-- Standard iPad -->
-		if (ploption('touch_icon_ipad')) {
-			printf('<link rel="apple-touch-icon" sizes="72x72" href="%s" />', ploption( 'touch_icon_ipad' )) ;
-		}
-
-		//<!-- Retina iPad -->
-		if (ploption('touch_icon_ipad')) {
-			printf('<link rel="apple-touch-icon" sizes="144x144" href="%s" />', ploption( 'touch_icon_ipad' )) ;
-		}
-
 		echo '<meta name="apple-mobile-web-app-capable" content="yes">';
 
 		echo '<meta name="apple-mobile-web-app-status-bar-style" content="black">';
@@ -93,24 +79,15 @@ class Chappy {
 
 	function js_settings () {
 
-		if ( ploption( 'pl_webapp_bubble_returning_visitor' ) == 'y') {
-			$returning_visitor = 'true';
-		} else {
-			$returning_visitor = 'false';
-		}
-
-		if ( ploption( 'pl_webapp_bubble_arrow' ) == 'y') {
-			$arrow = 'true';
-		} else {
-			$arrow = 'false';
-		}
-
-		$animation_in = ( ploption( 'pl_webapp_bubble_animation_in' ) ) ? ploption( 'pl_webapp_bubble_animation_in' ) : "'bubble'";
-		$animation_out = ( ploption( 'pl_webapp_bubble_animation_out' ) ) ? ploption( 'pl_webapp_bubble_animation_out' ) : "'drop'";
-		$start_delay = ( ploption( 'pl_webapp_bubble_start_delay' ) ) ? ploption( 'pl_webapp_bubble_start_delay' ) : '2000';
-		$lifespan = ( ploption( 'pl_webapp_bubble_lifespan' ) ) ? ploption( 'pl_webapp_bubble_lifespan' ) : '15000';
-		$expire = ( ploption( 'pl_webapp_bubble_often_show' ) ) ? ploption( 'pl_webapp_bubble_often_show' ) : '0';
-		$message = ( ploption( 'pl_webapp_bubble_replace_message' ) ) ? ploption( 'pl_webapp_bubble_replace_message' ) : '""';
+		$icon = ( pl_setting( 'pl_webapp_bubble_icon' ) ) ? pl_setting( 'pl_webapp_bubble_icon' ) : 'false';
+		$arrow = ( pl_setting( 'pl_webapp_bubble_arrow' ) ) ? pl_setting( 'pl_webapp_bubble_arrow' ) : 'false';
+		$returning_visitor = ( pl_setting( 'pl_webapp_bubble_returning_visitor' ) ) ? pl_setting( 'pl_webapp_bubble_returning_visitor' ) : 'false';
+		$animation_in = ( pl_setting( 'pl_webapp_bubble_animation_in' ) ) ? pl_setting( 'pl_webapp_bubble_animation_in' ) : "'bubble'";
+		$animation_out = ( pl_setting( 'pl_webapp_bubble_animation_out' ) ) ? pl_setting( 'pl_webapp_bubble_animation_out' ) : "'drop'";
+		$start_delay = ( pl_setting( 'pl_webapp_bubble_start_delay' ) ) ? pl_setting( 'pl_webapp_bubble_start_delay' ) : '2000';
+		$lifespan = ( pl_setting( 'pl_webapp_bubble_lifespan' ) ) ? pl_setting( 'pl_webapp_bubble_lifespan' ) : '15000';
+		$helpire = ( pl_setting( 'pl_webapp_bubble_often_show' ) ) ? pl_setting( 'pl_webapp_bubble_often_show' ) : '0';
+		$message = ( pl_setting( 'pl_webapp_bubble_replace_message' ) ) ? pl_setting( 'pl_webapp_bubble_replace_message' ) : '""';
 
 		?>
 
@@ -122,12 +99,10 @@ class Chappy {
 					animationOut: "<?php echo $animation_out; ?>",			// drop || bubble || fade
 					startDelay: <?php echo $start_delay; ?>,				// 2 seconds from page load before the balloon appears
 					lifespan: <?php echo $lifespan; ?>,						// 15 seconds before it is automatically destroyed
-					expire: <?php echo $expire; ?>,							// Minutes to wait before showing the popup again (0 = always displayed)
+					expire: <?php echo $helpire; ?>,							// Minutes to wait before showing the popup again (0 = always displayed)
 					message: '<?php echo $message; ?>',						// Customize your message or force a language ('' = automatic)
 					arrow: <?php echo $arrow; ?>,
-					hookOnLoad: true,										// Should we hook to onload event? (really advanced usage)
-					iterations: 100,
-					touchIcon: true											// Internal/debug use	// Show the message only once every 12 hours
+					touchIcon: <?php echo $icon; ?>,
 				};
 
 			</script>
@@ -135,177 +110,148 @@ class Chappy {
 		<?php
 	}
 
-	function settings() {
+	function options( $settings ){
 
-		// settings icon path
-		$icon_path = sprintf( '%s/%s', WP_PLUGIN_URL, basename(dirname( __FILE__ )));
+        $settings['Chappy'] = array(
+            'name'  => 'Chappy',
+            'icon'  => 'icon-mobile-phone',
+            'pos'   => 5,
+            'opts'  => array(
 
-		// options array for creating the settings tab
-		$options = array(
-
-			// edit text on pop up and replace the "this web app" with user text
-			'pl_webapp_bubble_replace_message'  =>  array(
-				'type'	=>	'text',
-				'inputlabel'	 =>	 __('Your Text to Replace the Default Message. (this will override the language option)', 'pagelines-webapp'),
-				'title'		=>	__('Custom message', 'pagelines-webapp' ),
-				'shortexp'	=>	__('Add your own custom text to replace the standard message verbiage with your own.  ', 'pagelines-webapp'),
-				'exp'	=>	__('Example replacement: This is a custom message. Your device is an <strong>%device</strong>. The action icon is %icon.','pagelines-webapp'),
-
-			),
-
-			'pl_webapp_bubble_is_frontpage'  =>  array(
-				'type'	=>	'check',
-				'inputlabel'	 =>	 __('Only show on frontpage?', 'pagelines-webapp'),
-				'title'		=>	__('Show on frontpage', 'pagelines-webapp' ),
-				'exp'	=>	__('Checking this option will do so the balloon is only showed on frontpage!','pagelines-webapp'),
-			),
-
-			'pl_webapp_bubble_returning_visitor'	=>	array(
-				'default'  =>  'true',
-				'type'	=>	'select',
-				'selectvalues' =>  array(
-					'y'	=>	array( 'name' => __( 'True' , 'pagelines-webapp' )),
-					'n' =>	array( 'name' => __( 'False' , 'pagelines-webapp' ))
+				array(
+					'key' 			=> 	'pl_webapp_bubble_replace_message',
+					'type'			=>	'text',
+					'label'			=>	__('Your Text to Replace the Default Message. (this will override the language option)', 'chappy'),
+					'title'			=>	__('Custom message', 'chappy' ),
+					'help'			=>	__('Example replacement: This is a custom message. Your device is an <strong>%device</strong>. The action icon is %icon.','chappy'),
 				),
-				'inputlabel'	 =>	 __('Only show to returning visitors?', 'pagelines-webapp'),
-				'title'		=>	__('Returning visitors', 'pagelines-webapp' ),
-				'shortexp'	=>	__('Show the balloon to returning visitors only.', 'pagelines-webapp'),
-				'exp'	=>	__('Will not show to visitors who visits first time, but will do to visitors who visits second time. (Setting this to true is HIGHLY RECCOMENDED)','pagelines-webapp'),
 
-			),
-			'pl_webapp_images'   => array(
-				'type'	  => 'multi_option',
-				'title'	   =>  __('Images', 'pagelines-webapp'),
-				'exp'	=>	__('The touch icon is the icon that your iPhone saves on the homescreen. The touch icon needs to be 114x114. </br></br></br> The touch icon is the icon that your iPad saves on the homescreen. The touch icon needs to be 144x144 pixel.','pagelines-webapp'),
-				'selectvalues'	=> array(
-					'touch_icon_iphone' => array(
-						'type'				 => 'image_upload',
-						'inputlabel'	   => __( 'Upload your Apple touch icon for iPhone.', 'pagelines-webapp' ),
-					),
+				array(
+					'key' 			=> 	'pl_webapp_bubble_is_frontpage',
+					'type'			=>	'check',
+					'label'			=>	__('Only show on frontpage?', 'chappy'),
+					'title'			=>	__('Show on frontpage', 'chappy' ),
+					'help'			=>	__('Checking this option will do so the balloon is only showed on frontpage!','chappy'),
+				),
 
-					'touch_icon_ipad' => array(
-						'type'				 => 'image_upload',
-						'inputlabel'	   => __( 'Upload your Apple touch icon for iPad.', 'pagelines-webapp' ),
-					)
-				)
-			),
+				array(
+					'key' 			=> 	'pl_webapp_bubble_returning_visitor',
+					'default'  		=>	false,
+					'type'			=>	'check',
+					'label'			=>	__('Only show to returning visitors?', 'chappy'),
+					'title'			=>	__('Returning visitors', 'chappy' ),
+					'help'			=>	__('Will not show to visitors who visits first time, but will do to visitors who visits second time. (Checking this is HIGHLY RECCOMENDED)','chappy'),
+				),
 
-			'pl_webapp_js_settings'	=> array(
-				'type'	  => 'multi_option',
-				'title'	   =>  __('Bubble', 'pagelines-webapp'),
-				'selectvalues'	=> array(
-					'pl_webapp_bubble_animation_in'	 =>	 array(
-						'default'	=>	'drop',
-						'type'	  =>  'select',
-						'selectvalues' =>	array(
-							'drop'  =>  array( 'name' => __( 'Drop' , 'pagelines-webapp' )),
-							'bubble'	=>	array( 'name' => __( 'Bubble' , 'pagelines-webapp' )),
-							'fade' =>	 array( 'name' => __( 'Fade' , 'pagelines-webapp' ))
+				array(
+					'type'	  		=> 'multi',
+					'title'	   		=>  __('Bubble', 'chappy'),
+					'opts'			=> array(
+						array(
+							'key'			=>	'pl_webapp_bubble_animation_in',
+							'default'		=>	'drop',
+							'type'	  		=>  'select',
+							'opts' 			=>	array(
+								'drop'  		=>  array( 'name' => __( 'Drop' , 'chappy' )),
+								'bubble'		=>	array( 'name' => __( 'Bubble' , 'chappy' )),
+								'fade' 			=>	array( 'name' => __( 'Fade' , 'chappy' ))
+							),
+							'label'  		=>  __('Which animation would you like when bubble is appearing?', 'chappy'),
+							'title'		 	=>	__('Appearing animation', 'chappy' ),
 						),
-					'inputlabel'  =>  __('Which animation would you like when bubble is appearing?', 'pagelines-webapp'),
-					'title'		 =>	 __('Appearing animation', 'pagelines-webapp' ),
 
-				),
+						array(
+							'key' 			=> 	'pl_webapp_bubble_animation_out',
+							'default'		=>	'fade',
+							'type'	  		=>  'select',
+							'opts' 			=>	array(
+								'drop'  		=>  array( 'name' => __( 'Drop' , 'chappy' )),
+								'bubble'		=>	array( 'name' => __( 'Bubble' , 'chappy' )),
+								'fade' 			=>	array( 'name' => __( 'Fade' , 'chappy' ))
+							),
+							'label'  		=>  __('Which animation would you like when bubble is disappearing?', 'chappy'),
+							'title'	  		=>  __('Disappearing animation', 'chappy' ),
+						),
 
-				'pl_webapp_bubble_animation_out'  =>  array(
-					'default'	=>	'fade',
-					'type'	  =>  'select',
-					'selectvalues' =>	array(
-						'drop'  =>  array( 'name' => __( 'Drop' , 'pagelines-webapp' )),
-						'bubble'	=>	array( 'name' => __( 'Bubble' , 'pagelines-webapp' )),
-						'fade' =>	 array( 'name' => __( 'Fade' , 'pagelines-webapp' ))
-					),
-					'inputlabel'  =>  __('Which animation would you like when bubble is disappearing?', 'pagelines-webapp'),
-					'title'	  =>  __('Disappearing animation', 'pagelines-webapp' ),
-				),
+						array(
+							'key' 			=> 	'pl_webapp_bubble_start_delay',
+							'type'	  		=>  'text',
+							'label'  		=>  __('Delay before bubble is appearing', 'chappy'),
+							'help'	 		=>	__('Enter the ms you would like the button to delay before automaticly closing.  The default is 2000ms ', 'chappy'),
+						),
 
-				'pl_webapp_bubble_start_delay' =>  array(
-					'type'	  =>  'text',
-					'inputlabel'  =>  __('Delay before bubble is appearing', 'pagelines-webapp'),
-					'shortexp'	 =>	 __('Enter the ms you would like the button to delay before automaticly closing.  The default is 2000ms ', 'pagelines-webapp'),
-				),
+						array(
+							'key' 			=> 	'pl_webapp_bubble_lifespan',
+							'type'	  		=>  'text',
+							'label'  		=>  __('Length The Button Stays On The Screen', 'chappy'),
+							'help'	 		=>	__('Enter the ms you would like the button to stay on the screen before it automatically closes.  The default is 15000ms ', 'chappy'),
+						),
 
-			// edit how many seconds the button stays on screen
-				'pl_webapp_bubble_lifespan' =>  array(
-					'type'	  =>  'text',
-					'inputlabel'  =>  __('Length The Button Stays On The Screen', 'pagelines-webapp'),
-					'shortexp'	 =>	 __('Enter the ms you would like the button to stay on the screen before it automatically closes.  The default is 15000ms ', 'pagelines-webapp'),
-				),
+						array(
+							'key' 			=>	'pl_webapp_bubble_often_show',
+							'type'	  		=>	'text',
+							'label'  		=> 	__('How Often The Button Appears', 'chappy'),
+							'help'	 		=>	__('Enter the minutes you would like the button to delay before the button shows again. The default is 0mins which means everytime.', 'chappy'),
+						),
 
-			// edit how often the button is shown
-				'pl_webapp_bubble_often_show' =>	 array(
-					'type'	  =>  'text',
-					'inputlabel'  =>  __('How Often The Button Appears', 'pagelines-webapp'),
-					'shortexp'	 =>	 __('Enter the minutes you would like the button to delay before the button shows again. The default is 0mins which means everytime.', 'pagelines-webapp'),
-				),
-
-			// add the apple touch icon to float left of the text
-				'pl_webapp_bubble_arrow'	=>	array(
-					'default'  =>  'true',
-					'type'	 =>	 'select',
-					'selectvalues' =>  array(
-						'y'	 =>	 array( 'name' => __( 'True' , 'pagelines-webapp' )),
-						'n' =>	 array( 'name' => __( 'False' , 'pagelines-webapp' ))
-					),
-					'inputlabel'  =>  __('Choose True or False', 'pagelines-webapp'),
-					'title'		 =>	 __('Display bubble arrow', 'pagelines-webapp' ),
-					'shortexp'	 =>	 __('Select true if you want your apple touch icon to float to the left of the text.', 'pagelines-webapp'),
+						array(
+							'key' 			=> 	'pl_webapp_bubble_arrow',
+							'default'  		=>  true,
+							'type'			=>	'check',
+							'label'  		=>  __('Arrow on bubble?', 'chappy'),
+							'help'	 		=>	__('Unceck this if you want to remove the arrow from the bubble!', 'chappy'),
+						),
+						array(
+							'key' 			=> 	'pl_webapp_bubble_icon',
+							'default'  		=>  true,
+							'type'			=>	'check',
+							'label'  		=>  __('Display touch icon?', 'chappy'),
+							'help'	 		=>	__('Unceck this if you want to remove the touch icon! Touch icon can be changed from Global Options -> Site Images', 'chappy'),
+						),
 					)
-				)
-			),
+				),
 
-			'pl_webapp_style_options'	  => array(
-				'type'	  => 'multi_option',
-				'title'	   =>  __('Style', 'pagelines-webapp'),
-				'selectvalues'	=> array(
+				array(
+					'type'	  			=> 	'multi',
+					'title'	   			=>  __('Style', 'chappy'),
+					'opts'				=> 	array(
 
-					// select the color of the bold call to action
-					'pl_webapp_bubble_bold_color' =>	array(
-					    'default'   =>  '',
-					    'type'	 =>	 'colorpicker',
-					    'title'	 =>	 __('Text Color', 'pagelines-webapp'),
-					    'inputlabel'	 =>	 __('Select the text color', 'pagelines-webapp'),
-					    'shortexp'	=>	__('Select the color you would like your call to action text to be.', 'pagelines-webapp'),
-					),
+						array(
+							'key' 			=> 	'pl_webapp_bubble_bold_color',
+						    'default'   	=>  '#505050',
+						    'type'	 		=>	'color',
+						    'label'			=>	__('Select the text color', 'chappy'),
+						    'help'			=>	__('Select the color you would like your call to action text to be.', 'chappy'),
+						),
 
-					//select the color of the border
-					'pl_webapp_border'		  => array(
-					    'default'   =>  '',
-					    'type'	 =>	 'colorpicker',
-					    'title'	 =>	 __('Border Color', 'pagelines-webapp'),
-					    'inputlabel'	 =>	 __('Select the border color', 'pagelines-webapp'),
-					    'shortexp'	=>	__('Select the color you would like your border around the button.', 'pagelines-webapp'),
-					),
+						array(
+							'key' 			=> 	'pl_webapp_border',
+						    'default'   	=>  '#333',
+						    'type'	 		=>	'color',
+						    'label'			=>	__('Select the border color', 'chappy'),
+						    'help'			=>	__('Select the color you would like your border around the button.', 'chappy'),
+						),
 
-					//select the background color
-					'pl_webapp_bg'		  => array(
-					    'default'   =>  '',
-					    'type'	 =>	 'colorpicker',
-					    'title'	 =>	 __('Background Color', 'pagelines-webapp'),
-					    'inputlabel'	 =>	 __('Select the background color', 'pagelines-webapp'),
-					    'shortexp'	=>	__('Select the color you would like your background of the bubble.', 'pagelines-webapp'),
+						array(
+							'key' 			=>	'pl_webapp_bg',
+						    'default'   	=> 	'#a3a3a3',
+						    'type'	 		=>	'color',
+						    'label'			=>	__('Select the background color', 'chappy'),
+						    'help'			=>	__('Select the color you would like your background of the bubble.', 'chappy'),
+						)
 					)
-				)
+				),
 			),
+        );
 
-		);
-
-		// add options page to pagelines settings
-		pl_add_options_page(
-			array(
-				'name' => 'Chappy',
-				'array' => $options
-			)
-		);
-	}
-
-
+        return $settings;
+    }
 
 	function mixins( $less ){
 
-		$less['pl_webapp_border'] = ( ploption('pl_webapp_border') ) ? pl_hashify( ploption( 'pl_webapp_border' ) ) : '#505050';
-		$less['pl_webapp_bubble_bold_color'] = ( ploption('pl_webapp_bubble_bold_color') ) ? pl_hashify( ploption( 'pl_webapp_bubble_bold_color' ) ): '#333';
-		$less['pl_webapp_bg'] = ( ploption('pl_webapp_bg') ) ? pl_hashify( ploption( 'pl_webapp_bg' ) ): '#a3a3a3';
+		$less['pl_webapp_bubble_bold_color'] = ( pl_setting('pl_webapp_bubble_bold_color') ) ? pl_hashify( pl_setting( 'pl_webapp_bubble_bold_color' ) ) : '#333';
+		$less['pl_webapp_bg'] = ( pl_setting('pl_webapp_bg') ) ? pl_hashify( pl_setting( 'pl_webapp_bg' ) ) : '#a3a3a3';
+		$less['pl_webapp_border'] = ( pl_setting('pl_webapp_border') ) ? pl_hashify( pl_setting( 'pl_webapp_border' ) ) : '#505050';
 
 		return $less;
 
