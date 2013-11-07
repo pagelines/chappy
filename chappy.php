@@ -2,14 +2,13 @@
 /*
 Plugin Name: Chappy, The Cheap Web App
 Description: Turn Your PageLines Site Into an iPhone Web App! Over 12 Different Options, Customize the the Image Added to the iPhone Homescrean, Customize Everything About the Pop Up & Advance Behavior Control.
-Version: 69.6
+Version: 69.7
 Author: Aleksander Hansson & Mike Zielonka
 Author URI: http://chappy.ahansson.com/developers/
 Plugin URI: http://chappy.ahansson.com/
 Demo: http://chappy.ahansson.com/
 Tags: extension
 V3: true
-PageLines: true
 */
 
 class Chappy {
@@ -28,6 +27,21 @@ class Chappy {
 
 		add_action( 'init', array( &$this, 'init' ) );
 
+		add_action( 'init', array( &$this, 'ah_updater_init' ) );
+
+	}
+
+	function ah_updater_init() {
+
+		require_once( trailingslashit( plugin_dir_path( __FILE__ ) ) . 'includes/plugin-updater.php' );
+
+		$config = array(
+			'base'      => plugin_basename( __FILE__ ), 
+			'repo_uri'  => 'http://shop.ahansson.com',  
+			'repo_slug' => 'chappy',
+		);
+
+		new AH_Chappy_Plugin_Updater( $config );
 	}
 
 	function init() {
@@ -87,7 +101,7 @@ class Chappy {
 		$start_delay = ( pl_setting( 'pl_webapp_bubble_start_delay' ) ) ? pl_setting( 'pl_webapp_bubble_start_delay' ) : '2000';
 		$lifespan = ( pl_setting( 'pl_webapp_bubble_lifespan' ) ) ? pl_setting( 'pl_webapp_bubble_lifespan' ) : '15000';
 		$helpire = ( pl_setting( 'pl_webapp_bubble_often_show' ) ) ? pl_setting( 'pl_webapp_bubble_often_show' ) : '0';
-		$message = ( pl_setting( 'pl_webapp_bubble_replace_message' ) ) ? pl_setting( 'pl_webapp_bubble_replace_message' ) : '""';
+		$message = ( pl_setting( 'pl_webapp_bubble_replace_message' ) ) ? pl_setting( 'pl_webapp_bubble_replace_message' ) : '';
 
 		?>
 
@@ -112,40 +126,62 @@ class Chappy {
 
 	function options( $settings ){
 
+		$how_to_use = __( '
+		<strong>Watch the video before asking for additional help:</strong>
+		</br></br>
+			[pl_video type="youtube" id="Ly0q1bsGfx8"]
+		', 'chappy' );
+
         $settings['Chappy'] = array(
             'name'  => 'Chappy',
             'icon'  => 'icon-mobile-phone',
             'pos'   => 5,
             'opts'  => array(
 
-				array(
-					'key' 			=> 	'pl_webapp_bubble_replace_message',
-					'type'			=>	'text',
-					'label'			=>	__('Your Text to Replace the Default Message. (this will override the language option)', 'chappy'),
-					'title'			=>	__('Custom message', 'chappy' ),
-					'help'			=>	__('Example replacement: This is a custom message. Your device is an <strong>%device</strong>. The action icon is %icon.','chappy'),
+            	array(
+					'key' => 'pl_webapp_help',
+					'type'     => 'template',
+					'template'      => do_shortcode ($how_to_use),
+					'title' =>__( 'How to use:', 'chappy' ) ,
 				),
 
 				array(
-					'key' 			=> 	'pl_webapp_bubble_is_frontpage',
-					'type'			=>	'check',
-					'label'			=>	__('Only show on frontpage?', 'chappy'),
-					'title'			=>	__('Show on frontpage', 'chappy' ),
-					'help'			=>	__('Checking this option will do so the balloon is only showed on frontpage!','chappy'),
-				),
-
-				array(
-					'key' 			=> 	'pl_webapp_bubble_returning_visitor',
-					'default'  		=>	false,
-					'type'			=>	'check',
-					'label'			=>	__('Only show to returning visitors?', 'chappy'),
-					'title'			=>	__('Returning visitors', 'chappy' ),
-					'help'			=>	__('Will not show to visitors who visits first time, but will do to visitors who visits second time. (Checking this is HIGHLY RECCOMENDED)','chappy'),
-				),
-
-				array(
+					'key' 			=> 	'pl_webapp_settings',
 					'type'	  		=> 'multi',
-					'title'	   		=>  __('Bubble', 'chappy'),
+					'title'	   		=>  __('Text and When To Show', 'chappy'),
+					'opts'			=> array(
+
+						array(
+							'key' 			=> 	'pl_webapp_bubble_replace_message',
+							'type'			=>	'text',
+							'label'			=>	__('Your Text to Replace the Default Message. (this will override the language option)', 'chappy'),
+							'title'			=>	__('Custom message', 'chappy' ),
+							'help'			=>	__('Example replacement: This is a custom message. Your device is an <strong>%device</strong>. The action icon is %icon.','chappy'),
+						),
+
+						array(
+							'key' 			=> 	'pl_webapp_bubble_is_frontpage',
+							'type'			=>	'check',
+							'label'			=>	__('Only show on frontpage?', 'chappy'),
+							'title'			=>	__('Show on frontpage', 'chappy' ),
+							'help'			=>	__('Checking this option will do so the balloon is only showed on frontpage!','chappy'),
+						),
+
+						array(
+							'key' 			=> 	'pl_webapp_bubble_returning_visitor',
+							'default'  		=>	false,
+							'type'			=>	'check',
+							'label'			=>	__('Only show to returning visitors?', 'chappy'),
+							'title'			=>	__('Returning visitors', 'chappy' ),
+							'help'			=>	__('Will not show to visitors who visits first time, but will do to visitors who visits second time. (Checking this is HIGHLY RECCOMENDED)','chappy'),
+						)
+					),
+				),
+
+				array(
+					'key' 			=> 	'pl_webapp_bubble_settings',
+					'type'	  		=> 'multi',
+					'title'	   		=>  __('Animations', 'chappy'),
 					'opts'			=> array(
 						array(
 							'key'			=>	'pl_webapp_bubble_animation_in',
@@ -212,6 +248,7 @@ class Chappy {
 				),
 
 				array(
+					'key' 				=> 	'pl_webapp_styling',
 					'type'	  			=> 	'multi',
 					'title'	   			=>  __('Style', 'chappy'),
 					'opts'				=> 	array(
